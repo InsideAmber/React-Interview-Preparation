@@ -34,3 +34,10 @@ function DynamicMemoExample() {
 }
 
 export default DynamicMemoExample;
+
+/**
+ * useMemo memoizes the return value of a computation. In this example, 
+ * it prevents recalculating the sum of even numbers unless numbers changes. 
+ * If we trigger re-renders via other state (like count), React skips the memoized block, 
+ * improving performance — especially if the calculation is expensive.
+ */

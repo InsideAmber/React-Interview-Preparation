@@ -6,7 +6,7 @@ function MemoCallbackExample() {
 
   // 🔹 useMemo: Expensive calculation - sum of even numbers
   const evenSum = useMemo(() => {
-    console.log("Calculating even number sum...");
+    console.log("Calculating even number sum inside...");  
     // Filters even numbers → [10, 20, 30, 40, 50] (all are even)
     return numbers.filter(n => n % 2 === 0)
     // Adds them: (((((10 + 20) + 30) + 40) + 50)) = 150
@@ -17,6 +17,8 @@ function MemoCallbackExample() {
   const increment = useCallback(() => {
     setCount(prev => prev + 1);
   }, []);
+
+  console.log("Calculating even number sum outside...");
 
   return (
     <div style={{ fontFamily: "Arial", padding: "1rem" }}>
@@ -34,7 +36,10 @@ function MemoCallbackExample() {
 export default MemoCallbackExample;
 
 
-// Click the "Increment Count" button.
+/**
+It prevent only inside useMemo function to be called again when the component re-renders.
+The evenSum calculation is memoized, so it only recalculates when `numbers` changes.
+when we remove the useMemo then it will recalculate every time the component re-renders.
+ */
 
-// The count will increase, but Calculating even number sum... will not log again, 
-// because numbers didn't change.
+
