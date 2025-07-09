@@ -8,3 +8,30 @@
     - Real DOM manipulations are slow.
     - VDOM makes UI updates efficient and fast.
 
+# 2. Props vs State – Key Differences
+
+| Feature      | Props                  | State                 |
+| ------------ | ---------------------- | --------------------- |
+| Mutability   | Immutable (read-only)  | Mutable (can change)  |
+| Managed by   | Parent component       | The component itself  |
+| Use case     | Data passing           | Dynamic data handling |
+| Access in TS | Through interface/type | `useState` hook       |
+
+  # State Updates are Asynchronous
+
+   ```tsx
+   setCount(count + 1);
+   console.log(count); // Might still show old value!
+   ```
+
+  - React batches multiple state updates for performance optimization. 
+  - Always use the functional update form if you're updating based on previous state:
+
+   ```tsx
+   setCount(prev => prev + 1);
+   ```
+
+
+
+
+
