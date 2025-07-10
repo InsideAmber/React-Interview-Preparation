@@ -1,29 +1,50 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import type { AppDispatch, RootState } from '../../../redux/store';
-import { fetchUsers } from '../usersSlice';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../../redux/store";
+import { fetchUsers } from "../usersSlice";
 
 const UsersPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, loading, error } = useSelector((state: RootState) => state.users);
+  const { data, loading, error } = useSelector(
+    (state: RootState) => state.users
+  );
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading)
+    return (
+      <div className="text-center py-6 text-gray-600 font-medium">
+        Loading users...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="text-center py-6 text-red-600 font-medium">
+        Error: {error}
+      </div>
+    );
+
   return (
-     <ul>
-      {data.map(user => (
-        <li key={user.id}>{user.name}</li>
-      ))}
-    </ul>
-  )
-}
+    <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-blue-600 mb-4">User List (Redux)</h2>
+      <ul className="space-y-2">
+        {data.map((user) => (
+          <li
+            key={user.id}
+            className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 transition"
+          >
+            {user.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-export default UsersPage
-
+export default UsersPage;
 
 /**
 [UI] → dispatch(fetchUsers())

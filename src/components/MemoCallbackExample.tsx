@@ -6,29 +6,45 @@ function MemoCallbackExample() {
 
   // 🔹 useMemo: Expensive calculation - sum of even numbers
   const evenSum = useMemo(() => {
-    console.log("Calculating even number sum inside...");  
-    // Filters even numbers → [10, 20, 30, 40, 50] (all are even)
-    return numbers.filter(n => n % 2 === 0)
-    // Adds them: (((((10 + 20) + 30) + 40) + 50)) = 150
-    .reduce((a, b) => a + b, 0);
+    console.log("Calculating even number sum inside...");
+    return numbers
+      .filter((n) => n % 2 === 0)
+      .reduce((a, b) => a + b, 0);
   }, [numbers]);
 
   // 🔹 useCallback: Function that increments count
   const increment = useCallback(() => {
-    setCount(prev => prev + 1);
+    setCount((prev) => prev + 1);
   }, []);
 
   console.log("Calculating even number sum outside...");
 
   return (
-    <div style={{ fontFamily: "Arial", padding: "1rem" }}>
-      <h2>useMemo and useCallback Example</h2>
+    <div className="p-6 max-w-2xl mx-auto font-sans bg-white rounded-lg shadow-md space-y-4">
+      <h2 className="text-2xl font-semibold text-purple-600">
+        useMemo and useCallback Example
+      </h2>
 
-      <p>Numbers: {numbers.join(", ")}</p>
-      <p><strong>Sum of Even Numbers:</strong> {evenSum}</p>
+      <p>
+        <span className="font-medium text-gray-700">Numbers:</span>{" "}
+        {numbers.join(", ")}
+      </p>
 
-      <p><strong>Count:</strong> {count}</p>
-      <button onClick={increment}>Increment Count</button>
+      <p>
+        <span className="font-medium text-gray-700">Sum of Even Numbers:</span>{" "}
+        {evenSum}
+      </p>
+
+      <p>
+        <span className="font-medium text-gray-700">Count:</span> {count}
+      </p>
+
+      <button
+        onClick={increment}
+        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded transition"
+      >
+        🔼 Increment Count
+      </button>
     </div>
   );
 }
