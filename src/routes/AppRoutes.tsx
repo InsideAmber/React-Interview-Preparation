@@ -12,6 +12,7 @@ import FocusInputWithUseref from '../components/FocusInputWithUseref'
 import MemoCallbackExample from '../components/MemoCallbackExample'
 import UsersPage from '../features/users/pages/UsersPage'
 import UsersPageZustand from '../features/users/pages/UsersPageZustand'
+import ParentCounter from "../components/PureComponent/ParentCounter";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -27,6 +28,8 @@ const AppRoutes: React.FC = () => {
           <Route path={ROUTES.USE_REF_FOCUS} element={<FocusInputWithUseref />} />
           <Route path={ROUTES.USERS_REDUX} element={<UsersPage />} />
           <Route path={ROUTES.USERS_ZUSTAND} element={<UsersPageZustand />} />
+          <Route path={ROUTES.PURE_COMPONENT} element={<ParentCounter />} />
+
         </Routes>
       </Suspense>
     </Router>

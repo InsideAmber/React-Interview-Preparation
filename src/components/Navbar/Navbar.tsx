@@ -10,6 +10,8 @@ const NavBar: React.FC = () => {
     { path: ROUTES.USE_REF_FOCUS, label: "useRef Focus" },
     { path: ROUTES.USERS_REDUX, label: "Users Redux" },
     { path: ROUTES.USERS_ZUSTAND, label: "Users Zustand" },
+    { path: ROUTES.PURE_COMPONENT, label: "Pure Component" },
+
   ];
 
   return (

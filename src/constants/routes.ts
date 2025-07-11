@@ -6,4 +6,5 @@ export const ROUTES = {
   USE_REF_FOCUS: "/use-ref-focus",
   USERS_REDUX: "/users-redux",
   USERS_ZUSTAND: "/users-zustand",
+  PURE_COMPONENT: "/pure-component",
 };

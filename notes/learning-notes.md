@@ -39,7 +39,7 @@
 | **Example**    | `array.push(4)`                   | `[...array, 4]`                          |
 | **Impact**     | React might not detect changes    | React detects new object → re-renders    |
 
-- Example 1 — ❌ Mutable Update (Incorrect)
+Example 1 — ❌ Mutable Update (Incorrect)
 
 ```tsx
 const [numbers, setNumbers] = useState([1, 2, 3]);
@@ -54,7 +54,8 @@ Why this fails:
 - You set the same reference back with `setNumbers(numbers)`
 - React checks object reference → sees it's the same → no re-render happens
 
-- Example 2 — Immutable Update (Correct) :
+Example 2 — Immutable Update (Correct) :
+
 ```tsx
 const [numbers, setNumbers] = useState([1, 2, 3]);
 
