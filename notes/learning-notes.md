@@ -154,12 +154,12 @@ When Route is Visited:
 
   3. Use `React.memo`/`PureComponent` with Logs
 
-   ```tsx
+  ```tsx
   const MyComponent = React.memo((props) => {
   console.log("🔁 Memoized Component rendered");
   return <div>{props.value}</div>;
   });
- ``
+  ```
 
   - If logs appear despite no prop change, there's a problem
 
@@ -167,6 +167,7 @@ When Route is Visited:
 
   🛑 Common Mistake:
    Passing a new object or array on every render:
+   
    ```tsx
    <MyComponent someProp={{ x: 1 }} /> // Always new object → re-renders
    ```
