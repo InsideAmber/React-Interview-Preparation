@@ -11,6 +11,9 @@ const NavBar: React.FC = () => {
     { path: ROUTES.USERS_REDUX, label: "Users Redux" },
     { path: ROUTES.USERS_ZUSTAND, label: "Users Zustand" },
     { path: ROUTES.PURE_COMPONENT, label: "Pure Component" },
+    { path: ROUTES.RENDER_COUNT, label: "Render Count Hooks" },
+    { path: ROUTES.USERS_LIST, label: "Users List" },
+    { path: ROUTES.DASHBOARD, label: "Dashboard" },
 
   ];
 

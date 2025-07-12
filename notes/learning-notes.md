@@ -124,6 +124,134 @@ When Route is Visited:
   - Shows <Loader /> fallback during fetch
   - Then renders the component
 
+# 5. How would you debug unnecessary re-renders?
+
+   1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
+    
+   🔧 Tool: React Developer Tools Extension (Chrome/Firefox)
+     
+     - Go to Profiler tab
+     - Click “Record” 🟥
+     - Interact with your UI
+     - Stop recording 🟦
+
+    What it shows:
+     - Which components rendered
+     - How long they took
+     - Why they re-rendered (e.g. props changed or not)
+
+    Use it to spot:
+     - Components re-rendering without props/state change
+     - Frequent re-renders in lists
+
+  2. Add `console.log()` Inside Components
+   
+   ```tsx
+   console.log("🔁 Re-rendering MyComponent");
+   ```
+   - Simple but effective
+   - Helps pinpoint if child components re-render unnecessarily
+
+  3. Use `React.memo`/`PureComponent` with Logs
+
+   ```tsx
+  const MyComponent = React.memo((props) => {
+  console.log("🔁 Memoized Component rendered");
+  return <div>{props.value}</div>;
+  });
+ ``
+
+  - If logs appear despite no prop change, there's a problem
+
+  4. Track Object/Array Identity
+
+  🛑 Common Mistake:
+   Passing a new object or array on every render:
+   ```tsx
+   <MyComponent someProp={{ x: 1 }} /> // Always new object → re-renders
+   ```
+
+  ✅ Fix:
+   Use `useMemo` or `useCallback` to memoize:
+   ```tsx
+   const memoizedObj = useMemo(() => ({ x: 1 }), []);
+   ```
+
+  5. Add `why-did-you-render` Library
+   
+  Helps highlight unnecessary renders during development
+  🧪 Setup:
+  ```tsx
+  npm install @welldone-software/why-did-you-render
+  ```
+
+  ```tsx
+  import React from "react";
+  if (process.env.NODE_ENV === "development") {
+  // @ts-ignore
+  import("why-did-you-render").then((whyDidYouRender) => {
+    whyDidYouRender.default(React, {
+      trackAllPureComponents: true,
+    });
+  });
+  }
+  ```
+  Now if a React.memo component re-renders without prop change, it logs a warning.
+
+  6. Avoid Inline Functions in JSX (if passed to child)
+
+  ```tsx
+  <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
+  ```
+  ✅ Instead:
+
+  ```tsx
+  const onClick = useCallback(() => doSomething(), []);
+  <MyComponent onClick={onClick} />
+  ```
+
+  7. Break Down Big Components:
+
+  If a component has:
+   - Many props
+   - Deep conditional logic
+   - Lists or DOM manipulations
+
+  Split it into smaller components and use React.memo to isolate re-renders.
+
+  Summary Table
+
+  | Tool / Strategy                | Purpose                                |
+  | ------------------------------ | -------------------------------------- |
+  | **React Profiler**             | Visualize rendering frequency/time     |
+  | **Console logs**               | Simple tracking of renders             |
+  | **React.memo / PureComponent** | Prevents re-renders on unchanged props |
+  | **useMemo / useCallback**      | Avoids prop identity changes           |
+  | **why-did-you-render**         | Warns about avoidable re-renders       |
+  | **Component breakdown**        | Limits re-render scope                 |
+
+  You Can also Create a `useRenderCount()` Hook
+
+  To track how often a component renders:
+  ```tsx
+  import { useRef } from "react";
+
+  export function useRenderCount(name: string) {
+  const renderCount = useRef(1);
+  console.log(`🔁 ${name} rendered ${renderCount.current++} times`);
+  }
+  ```
+  usage:
+  ```tsx
+  useRenderCount("MyComponent");
+  ```
+
+
+
+
+
+
+
 
 
 

@@ -28,3 +28,11 @@ const ParentCounter = () => {
 };
 
 export default ParentCounter;
+
+/**
+ * ParentCounter component demonstrates the use of React.memo
+ * to prevent unnecessary re-renders of the ChildCounter component.
+ * 
+ * It maintains a count state and a separate state to trigger re-renders.
+ * The ChildCounter is memoized, so it only re-renders when its props change.
+ */
