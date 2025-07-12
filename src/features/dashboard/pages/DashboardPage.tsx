@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 const DashboardPage = () => {
   const navigate = useNavigate();
 
+  //  throw new Error("Test error from dashboard");  // Uncomment to test error boundary
+
   const handleLogout = () => {
     localStorage.removeItem("token"); // remove mock token
     navigate("/login"); // redirect to login

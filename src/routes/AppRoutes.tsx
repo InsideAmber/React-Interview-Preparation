@@ -25,11 +25,13 @@ import RenderCountExample from "../components/RenderCountExample";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import LoginPage from "../features/auth/pages/LoginPage";
 import NotFound from "../pages/NotFound";
+import ErrorBoundary from "../components/ErrorBoundary/ErrorBoundary";
 
 const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Navbar/>
+      <ErrorBoundary>
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path={ROUTES.HOME} element={<Home />} />
@@ -68,6 +70,7 @@ const AppRoutes: React.FC = () => {
           {/* Fallback route */}
         </Routes>
       </Suspense>
+      </ErrorBoundary>
     </Router>
   );
 };
