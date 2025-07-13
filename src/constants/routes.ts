@@ -11,4 +11,5 @@ export const ROUTES = {
   // Nested routes for users
   USERS_LIST: "/users",
   DASHBOARD: "/dashboard",
+  DEBOUNCE_EXAMPLE: "/debounce",
 };

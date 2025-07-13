@@ -14,6 +14,7 @@ const UserSettingsPage = lazy(() => import("../features/users/pages/NestedRoutes
 const DashboardPage = lazy(() =>
   import("../features/dashboard/pages/DashboardPage")
 );
+const DebounceExample = lazy(() => import("../features/examples/pages/DebounceExample"));
 
 import DynamicMemoExample from '../components/DynamicMemoExample'
 import FocusInputWithUseref from '../components/FocusInputWithUseref'
@@ -44,6 +45,7 @@ const AppRoutes: React.FC = () => {
           <Route path={ROUTES.USERS_ZUSTAND} element={<UsersPageZustand />} />
           <Route path={ROUTES.PURE_COMPONENT} element={<ParentCounter />} />
           <Route path={ROUTES.RENDER_COUNT} element={<RenderCountExample />} />
+          <Route path={ROUTES.DEBOUNCE_EXAMPLE} element={<DebounceExample />} />
 
           {/* Users Route with Nested Dynamic Routing */}
           <Route path={ROUTES.USERS_LIST} element={<UsersListPage />} />
