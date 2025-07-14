@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
+import NavigationsDropdown from "../ExtraNavigations/NavigationsDropdown";
 
 const NavBar: React.FC = () => {
   const links = [
@@ -10,32 +11,34 @@ const NavBar: React.FC = () => {
     { path: ROUTES.USE_REF_FOCUS, label: "useRef Focus" },
     { path: ROUTES.USERS_REDUX, label: "Users Redux" },
     { path: ROUTES.USERS_ZUSTAND, label: "Users Zustand" },
-    { path: ROUTES.PURE_COMPONENT, label: "Pure Component" },
-    { path: ROUTES.RENDER_COUNT, label: "Render Count Hooks" },
-    { path: ROUTES.USERS_LIST, label: "Users List" },
-    { path: ROUTES.DASHBOARD, label: "Dashboard" },
-    { path: ROUTES.DEBOUNCE_EXAMPLE, label: "Debounce Example" },
-
   ];
 
   return (
     <nav className="bg-gray-800 text-white px-4 py-3 shadow-md">
-      <ul className="flex flex-wrap gap-4 text-sm font-medium">
-        {links.map((link) => (
-          <li key={link.path}>
-            <NavLink
-              to={link.path}
-              className={({ isActive }) =>
-                `hover:text-yellow-400 transition ${
-                  isActive ? "text-yellow-300 underline" : ""
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+      <div className="flex items-center justify-between">
+        {/* Left side links */}
+        <ul className="flex flex-wrap gap-4 text-sm font-medium">
+          {links.map((link) => (
+            <li key={link.path}>
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  `hover:text-yellow-400 transition ${
+                    isActive ? "text-yellow-300 underline" : ""
+                  }`
+                }
+              >
+                {link.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+
+        {/* Right side Bookmark dropdown */}
+        <div className="ml-auto">
+          <NavigationsDropdown />
+        </div>
+      </div>
     </nav>
   );
 };
