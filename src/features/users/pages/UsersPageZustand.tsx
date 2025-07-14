@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import { useUserStore } from "../../../zustand/userStore";
+import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
+import { Copy } from "lucide-react";
+
 
 const UsersPageZustand = () => {
   const { users, loading, error, fetchUsers } = useUserStore();
+  const { copy, copiedText } = useCopyToClipboard();
+
 
   useEffect(() => {
     fetchUsers();
@@ -29,12 +34,25 @@ const UsersPageZustand = () => {
       </h2>
       <ul className="space-y-2">
         {users.map((user) => (
-          <li
-            key={user.id}
-            className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 transition"
-          >
-            {user.name}
-          </li>
+        <li
+        key={user.id}
+        className="px-4 py-2 bg-gray-100 rounded hover:bg-gray-200 transition flex justify-between items-center group"
+        >
+        <span>{user.name}</span>
+
+        {copiedText != user.name && <button
+        onClick={() => copy(user.name)}
+        className="opacity-0 group-hover:opacity-100 transition text-gray-500 hover:text-green-600"
+        title="Copy name"
+        >
+        <Copy size={16} />
+        </button>}
+
+        {copiedText === user.name && (
+        <span className="ml-2 text-sm text-green-500">Copied!</span>
+        )}
+        </li>
+
         ))}
       </ul>
     </div>
