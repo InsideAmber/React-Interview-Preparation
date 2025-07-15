@@ -1,12 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { useLocalStorage } from "../../../hooks/useLocalStorage";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+    const [_, __,reset] = useLocalStorage<string>("token", "");
+
 
   //  throw new Error("Test error from dashboard");  // Uncomment to test error boundary
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // remove mock token
+    reset(); // remove mock token
     navigate("/login"); // redirect to login
   };
 

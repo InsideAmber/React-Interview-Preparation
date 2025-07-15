@@ -1,13 +1,16 @@
 import { useNavigate, useLocation } from "react-router-dom";
+import { useLocalStorage } from "../../../hooks/useLocalStorage";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as any)?.from?.pathname || "/dashboard";
+  const [_, setToken,__] = useLocalStorage<string>("token", "");
+
 
   const handleLogin = () => {
     // Simulate login: set token in localStorage
-    localStorage.setItem("token", "mock-token");
+    setToken("mock-token");
     navigate(from, { replace: true });
   };
 
