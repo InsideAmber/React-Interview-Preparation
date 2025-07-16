@@ -1,6 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 import NavigationsDropdown from "../ExtraNavigations/NavigationsDropdown";
+import { Atom } from "lucide-react";
 
 const NavBar: React.FC = () => {
   const links = [
@@ -16,7 +17,15 @@ const NavBar: React.FC = () => {
   return (
     <nav className="bg-gray-800 text-white px-4 py-3 shadow-md">
       <div className="flex items-center justify-between">
-        {/* Left side links */}
+        {/* Left side branding */}
+        <Link to={ROUTES.HOME} className="flex items-center gap-2 mr-6 hover:opacity-90">
+          <Atom size={24} className="text-cyan-400" />
+          <span className="text-xl font-bold text-white tracking-wide">
+            ReactifyPro
+          </span>
+        </Link>
+
+        {/* Center nav links */}
         <ul className="flex flex-wrap gap-4 text-sm font-medium">
           {links.map((link) => (
             <li key={link.path}>
@@ -34,7 +43,7 @@ const NavBar: React.FC = () => {
           ))}
         </ul>
 
-        {/* Right side Bookmark dropdown */}
+        {/* Right side dropdown */}
         <div className="ml-auto">
           <NavigationsDropdown />
         </div>
