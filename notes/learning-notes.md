@@ -318,16 +318,18 @@ When Route is Visited:
 - JSX working
 - Hooks - `useState` `useEffect`
 - [`useMemo` and `useCallback`](https://github.com/InsideAmber/React-Interview-Preparation/tree/master/src/components)
-- [`useRef`]()
+- [`useRef`](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/components/FocusInputWithUseref.tsx)
 - prop drilling vs lifting state up
-- [context API vs Redux vs Zustand]()
-- Performance Optimization (Lazy loading, code splitting, memoization)
-- [React.memo and Pure components]()
+- context API vs Redux vs Zustand
+    - [Redux](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/features/users/pages/UsersPage.tsx)
+    - [Zustand](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/features/users/pages/UsersPageZustand.tsx)
+- [Performance Optimization (Lazy loading, code splitting, memoization)](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/routes/AppRoutes.tsx)
+- [React.memo and Pure components](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/components/PureComponent/ChildCounter.tsx)
 - How would you debug unnecessary re-renders?
-- [Routing and Nested Routes]()
-- [Error Boundaries]()
-- [Custom hook implementation (`useDebounce`, `useLocalStorage`, `useOutsideClick`, `useCopyToClipboard`, `useToggle`)]()
-- [Todo with `useReducer`]()
+- [Routing and Nested Routes](https://github.com/InsideAmber/React-Interview-Preparation/tree/master/src/features/users/pages/NestedRoutesExample)
+- [Error Boundaries](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/components/ErrorBoundary/ErrorBoundary.tsx)
+- [Custom hook implementation (`useDebounce`, `useLocalStorage`, `useOutsideClick`, `useCopyToClipboard`, `useToggle`)](https://github.com/InsideAmber/React-Interview-Preparation/tree/master/src/hooks)
+- [Todo with `useReducer`](https://github.com/InsideAmber/React-Interview-Preparation/blob/master/src/components/todo/TodoPage.tsx)
 
 
 
