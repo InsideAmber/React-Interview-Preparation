@@ -8,7 +8,69 @@
     - Real DOM manipulations are slow.
     - VDOM makes UI updates efficient and fast.
 
-# 2. Props vs State – Key Differences
+# 2. What are the differences between functional and class components?
+
+| Feature           | Class Component                  | Functional Component    |
+| ----------------- | -------------------------------- | ----------------------- |
+| Syntax            | ES6 class                        | JavaScript function     |
+| State             | `this.state` + `this.setState()` | `useState` hook         |
+| Lifecycle methods | Yes                              | Via hooks (`useEffect`) |
+| `this` context    | Required                         | Not needed              |
+| Cleaner code      | ❌ Often more boilerplate        |✅ Concise and readable |
+
+# 3. Explain the Component Lifecycle in React
+
+✅ Lifecycle Phases (Class Components):
+
+Mounting: Component is added to DOM
+- `constructor()`, `render()`, `componentDidMount()`
+
+Updating: Props/state changes
+- `shouldComponentUpdate()`, `componentDidUpdate()`
+
+Unmounting: Component is removed
+- `componentWillUnmount()`
+
+✅ Diagram:
+
+Mounting ─▶ Updating ─▶ Unmounting
+    ↓             ↑
+componentDidMount  componentDidUpdate
+
+How do Lifecycle Methods Map to Hooks?
+
+| Class Lifecycle Method | Equivalent Hook                           |
+| ---------------------- | ----------------------------------------- |
+| `componentDidMount`    | `useEffect(() => {}, [])`                 |
+| `componentDidUpdate`   | `useEffect(() => { ... }, [deps])`        |
+| `componentWillUnmount` | `useEffect(() => return () => {...}, [])` |
+
+# 4. What is JSX? Can the browser read JSX directly?
+
+✅ Concept:
+JSX (JavaScript XML) is a syntax extension that lets you write HTML in JavaScript.
+
+It looks like HTML but is actually syntactic sugar for `React.createElement()`.
+
+❗ Important:
+- JSX is not valid JavaScript.
+- It must be transpiled (compiled) using Babel or a bundler like Vite, Webpack.
+
+✅ JSX Example:
+```jsx
+const element = <h1>Hello, Mr. Amber</h1>;
+```
+
+Transpiled version:
+```js
+const element = React.createElement('h1', null, 'Hello, Mr. Amber');
+```
+
+✅ Browser:
+The browser doesn't understand JSX, but your build tools convert it to plain JavaScript.
+
+
+# 5. Props vs State – Key Differences
 
 | Feature      | Props                  | State                 |
 | ------------ | ---------------------- | --------------------- |
@@ -31,7 +93,7 @@
    setCount(prev => prev + 1);
    ```
 
-# 3. 🔁 Mutability vs Immutability
+# 6. 🔁 Mutability vs Immutability
   
 |   Concept      | Mutability                        | Immutability                             |
 | -------------- | --------------------------------- | ---------------------------------------- |
@@ -79,7 +141,7 @@ const c = [...a];   // immutable — new reference
 Mutability means modifying the original data structure, while immutability involves creating a new copy with changes. React’s useState depends on immutability — it only re-renders when state changes via a new reference. Mutating state directly can cause React to skip updates.
 
 
-# 4. What is Code Splitting?
+# 7. What is Code Splitting?
 Code splitting is a technique to break your JavaScript bundle into smaller chunks so that only the code needed for a particular route/component is loaded — not the entire app upfront.
 
 It helps:
@@ -124,7 +186,7 @@ When Route is Visited:
   - Shows <Loader /> fallback during fetch
   - Then renders the component
 
-# 5. How would you debug unnecessary re-renders?
+# 8. How would you debug unnecessary re-renders?
 
    1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
     
@@ -248,7 +310,24 @@ When Route is Visited:
   ```
 
 
+# Topics Covered: 
 
+- Virtual Dom 
+- functional components vs class components
+- components lifecycle in reactjs
+- JSX working
+- Hooks - `useState` `useEffect`
+- [`useMemo` and `useCallback`](https://github.com/InsideAmber/React-Interview-Preparation/tree/master/src/components)
+- [`useRef`]()
+- prop drilling vs lifting state up
+- [context API vs Redux vs Zustand]()
+- Performance Optimization (Lazy loading, code splitting, memoization)
+- [React.memo and Pure components]()
+- How would you debug unnecessary re-renders?
+- [Routing and Nested Routes]()
+- [Error Boundaries]()
+- [Custom hook implementation (`useDebounce`, `useLocalStorage`, `useOutsideClick`, `useCopyToClipboard`, `useToggle`)]()
+- [Todo with `useReducer`]()
 
 
 
