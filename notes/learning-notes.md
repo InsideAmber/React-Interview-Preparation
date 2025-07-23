@@ -218,62 +218,60 @@ When Route is Visited:
 
 3. Use `React.memo`/`PureComponent` with Logs
 
-  ```tsx
-  const MyComponent = React.memo((props) => {
-  console.log("🔁 Memoized Component rendered");
-  return <div>{props.value}</div>;
-  });
-  ```
+    ```tsx
+    const MyComponent = React.memo((props) => {
+    console.log("🔁 Memoized Component rendered");
+    return <div>{props.value}</div>;
+    });
+    ```
 
-  - If logs appear despite no prop change, there's a problem
+    - If logs appear despite no prop change, there's a problem
 
 4. Track Object/Array Identity
 
-  🛑 Common Mistake:
-   Passing a new object or array on every render:
-   
-   ```tsx
-   <MyComponent someProp={{ x: 1 }} /> // Always new object → re-renders
-   ```
+   🛑 Common Mistake:
+     Passing a new object or array on every render:
+     
+    ```tsx
+     <MyComponent someProp={{ x: 1 }} /> // Always new object → re-renders
+    ```
 
   ✅ Fix:
    Use `useMemo` or `useCallback` to memoize:
-   ```tsx
-   const memoizedObj = useMemo(() => ({ x: 1 }), []);
-   ```
+    ```tsx
+     const memoizedObj = useMemo(() => ({ x: 1 }), []);
+    ```
 
 5. Add `why-did-you-render` Library
    
   Helps highlight unnecessary renders during development
   🧪 Setup:
-  ```tsx
-  npm install @welldone-software/why-did-you-render
-  ```
-
-  ```tsx
-  import React from "react";
-  if (process.env.NODE_ENV === "development") {
-  // @ts-ignore
-  import("why-did-you-render").then((whyDidYouRender) => {
-    whyDidYouRender.default(React, {
-      trackAllPureComponents: true,
-    });
-  });
-  }
-  ```
-  Now if a React.memo component re-renders without prop change, it logs a warning.
+    ```tsx
+     npm install @welldone-software/why-did-you-render
+    ```
+    ```tsx
+      import React from "react";
+      if (process.env.NODE_ENV === "development") {
+      // @ts-ignore
+      import("why-did-you-render").then((whyDidYouRender) => {
+        whyDidYouRender.default(React, {
+          trackAllPureComponents: true,
+        });
+      });
+      }
+    ```
+    Now if a React.memo component re-renders without prop change, it logs a warning.
 
 6. Avoid Inline Functions in JSX (if passed to child)
 
-  ```tsx
-  <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
-  ```
+    ```tsx
+     <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
+    ```
   ✅ Instead:
-
-  ```tsx
-  const onClick = useCallback(() => doSomething(), []);
-  <MyComponent onClick={onClick} />
-  ```
+    ```tsx
+     const onClick = useCallback(() => doSomething(), []);
+     <MyComponent onClick={onClick} />
+    ```
 
 7. Break Down Big Components:
 
