@@ -238,18 +238,21 @@ When Route is Visited:
 
   ✅ Fix:
    Use `useMemo` or `useCallback` to memoize:
-    ```tsx
+   
+   ```tsx
      const memoizedObj = useMemo(() => ({ x: 1 }), []);
-    ```
+   ```
 
 5. Add `why-did-you-render` Library
    
   Helps highlight unnecessary renders during development
   🧪 Setup:
-    ```tsx
+  
+  ```tsx
      npm install @welldone-software/why-did-you-render
-    ```
-    ```tsx
+  ```
+    
+  ```tsx
       import React from "react";
       if (process.env.NODE_ENV === "development") {
       // @ts-ignore
@@ -259,19 +262,20 @@ When Route is Visited:
         });
       });
       }
-    ```
-    Now if a React.memo component re-renders without prop change, it logs a warning.
+  ```
+  Now if a React.memo component re-renders without prop change, it logs a warning.
 
 6. Avoid Inline Functions in JSX (if passed to child)
 
-    ```tsx
+   ```tsx
      <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
-    ```
+   ```
   ✅ Instead:
-    ```tsx
+
+  ```tsx
      const onClick = useCallback(() => doSomething(), []);
      <MyComponent onClick={onClick} />
-    ```
+  ```
 
 7. Break Down Big Components:
 
