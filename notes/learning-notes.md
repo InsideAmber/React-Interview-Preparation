@@ -197,13 +197,13 @@ When Route is Visited:
    - Interact with your UI
    - Stop recording 🟦
 
-  What it shows:
+   What it shows:
   
-  - Which components rendered
-  - How long they took
-  - Why they re-rendered (e.g. props changed or not)
+   - Which components rendered
+   - How long they took
+   - Why they re-rendered (e.g. props changed or not)
 
-  Use it to spot:
+   Use it to spot:
   
    - Components re-rendering without props/state change
    - Frequent re-renders in lists
