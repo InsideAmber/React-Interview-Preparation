@@ -1,4 +1,4 @@
-# 1. What is the Virtual DOM and how does React use it?
+## 1. What is the Virtual DOM and how does React use it?
 - The Virtual DOM (VDOM) is a lightweight in-memory representation of the real DOM.
 - React uses the VDOM to improve performance. When your app changes state:
 - React creates a new Virtual DOM.
