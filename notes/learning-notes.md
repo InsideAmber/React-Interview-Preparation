@@ -188,7 +188,7 @@ When Route is Visited:
 
 # 8. How would you debug unnecessary re-renders?
 
-   1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
+1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
     
    Tool: React Developer Tools Extension (Chrome/Firefox)
    
@@ -208,7 +208,7 @@ When Route is Visited:
    - Components re-rendering without props/state change
    - Frequent re-renders in lists
 
-  2. Add `console.log()` Inside Components
+2. Add `console.log()` Inside Components
    
    ```tsx
    console.log("🔁 Re-rendering MyComponent");
@@ -216,7 +216,7 @@ When Route is Visited:
    - Simple but effective
    - Helps pinpoint if child components re-render unnecessarily
 
-  3. Use `React.memo`/`PureComponent` with Logs
+3. Use `React.memo`/`PureComponent` with Logs
 
   ```tsx
   const MyComponent = React.memo((props) => {
@@ -227,7 +227,7 @@ When Route is Visited:
 
   - If logs appear despite no prop change, there's a problem
 
-  4. Track Object/Array Identity
+4. Track Object/Array Identity
 
   🛑 Common Mistake:
    Passing a new object or array on every render:
@@ -242,7 +242,7 @@ When Route is Visited:
    const memoizedObj = useMemo(() => ({ x: 1 }), []);
    ```
 
-  5. Add `why-did-you-render` Library
+5. Add `why-did-you-render` Library
    
   Helps highlight unnecessary renders during development
   🧪 Setup:
@@ -263,7 +263,7 @@ When Route is Visited:
   ```
   Now if a React.memo component re-renders without prop change, it logs a warning.
 
-  6. Avoid Inline Functions in JSX (if passed to child)
+6. Avoid Inline Functions in JSX (if passed to child)
 
   ```tsx
   <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
@@ -275,7 +275,7 @@ When Route is Visited:
   <MyComponent onClick={onClick} />
   ```
 
-  7. Break Down Big Components:
+7. Break Down Big Components:
 
   If a component has:
    - Many props
