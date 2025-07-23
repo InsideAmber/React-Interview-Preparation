@@ -190,19 +190,18 @@ When Route is Visited:
 
    1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
     
-   🔧 Tool: React Developer Tools Extension (Chrome/Firefox)
-     
+   Tool: React Developer Tools Extension (Chrome/Firefox)
      - Go to Profiler tab
      - Click “Record” 🟥
      - Interact with your UI
      - Stop recording 🟦
 
-    What it shows:
+  What it shows:
      - Which components rendered
      - How long they took
      - Why they re-rendered (e.g. props changed or not)
 
-    Use it to spot:
+  Use it to spot:
      - Components re-rendering without props/state change
      - Frequent re-renders in lists
 
