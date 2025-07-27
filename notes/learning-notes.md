@@ -1,14 +1,14 @@
-# 1. What is the Virtual DOM and how does React use it?
+## 1. What is the Virtual DOM and how does React use it?
 - The Virtual DOM (VDOM) is a lightweight in-memory representation of the real DOM.
 - React uses the VDOM to improve performance. When your app changes state:
 - React creates a new Virtual DOM.
 - It compares the new Virtual DOM with the previous one (diffing).
 - Then, React applies only the minimal updates to the real DOM (aka reconciliation).
-  # Why it’s important:
+  ### Why it’s important:
     - Real DOM manipulations are slow.
     - VDOM makes UI updates efficient and fast.
 
-# 2. What are the differences between functional and class components?
+## 2. What are the differences between functional and class components?
 
 | Feature           | Class Component                  | Functional Component    |
 | ----------------- | -------------------------------- | ----------------------- |
@@ -18,7 +18,7 @@
 | `this` context    | Required                         | Not needed              |
 | Cleaner code      | ❌ Often more boilerplate        |✅ Concise and readable |
 
-# 3. Explain the Component Lifecycle in React
+## 3. Explain the Component Lifecycle in React
 
 ✅ Lifecycle Phases (Class Components):
 
@@ -45,7 +45,7 @@ How do Lifecycle Methods Map to Hooks?
 | `componentDidUpdate`   | `useEffect(() => { ... }, [deps])`        |
 | `componentWillUnmount` | `useEffect(() => return () => {...}, [])` |
 
-# 4. What is JSX? Can the browser read JSX directly?
+## 4. What is JSX? Can the browser read JSX directly?
 
 ✅ Concept:
 JSX (JavaScript XML) is a syntax extension that lets you write HTML in JavaScript.
@@ -70,7 +70,7 @@ const element = React.createElement('h1', null, 'Hello, Mr. Amber');
 The browser doesn't understand JSX, but your build tools convert it to plain JavaScript.
 
 
-# 5. Props vs State – Key Differences
+## 5. Props vs State – Key Differences
 
 | Feature      | Props                  | State                 |
 | ------------ | ---------------------- | --------------------- |
@@ -79,7 +79,7 @@ The browser doesn't understand JSX, but your build tools convert it to plain Jav
 | Use case     | Data passing           | Dynamic data handling |
 | Access in TS | Through interface/type | `useState` hook       |
 
-  # State Updates are Asynchronous
+  ### State Updates are Asynchronous
 
    ```tsx
    setCount(count + 1);
@@ -93,7 +93,7 @@ The browser doesn't understand JSX, but your build tools convert it to plain Jav
    setCount(prev => prev + 1);
    ```
 
-# 6. 🔁 Mutability vs Immutability
+## 6. 🔁 Mutability vs Immutability
   
 |   Concept      | Mutability                        | Immutability                             |
 | -------------- | --------------------------------- | ---------------------------------------- |
@@ -141,7 +141,7 @@ const c = [...a];   // immutable — new reference
 Mutability means modifying the original data structure, while immutability involves creating a new copy with changes. React’s useState depends on immutability — it only re-renders when state changes via a new reference. Mutating state directly can cause React to skip updates.
 
 
-# 7. What is Code Splitting?
+## 7. What is Code Splitting?
 Code splitting is a technique to break your JavaScript bundle into smaller chunks so that only the code needed for a particular route/component is loaded — not the entire app upfront.
 
 It helps:
@@ -186,27 +186,29 @@ When Route is Visited:
   - Shows <Loader /> fallback during fetch
   - Then renders the component
 
-# 8. How would you debug unnecessary re-renders?
+## 8. How would you debug unnecessary re-renders?
 
-   1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
+1. Use [React DevTools Profiler](https://react.dev/learn/react-developer-tools):
     
-   🔧 Tool: React Developer Tools Extension (Chrome/Firefox)
-     
-     - Go to Profiler tab
-     - Click “Record” 🟥
-     - Interact with your UI
-     - Stop recording 🟦
+   Tool: React Developer Tools Extension (Chrome/Firefox)
+   
+   - Go to Profiler tab
+   - Click “Record” 🟥
+   - Interact with your UI
+   - Stop recording 🟦
 
-    What it shows:
-     - Which components rendered
-     - How long they took
-     - Why they re-rendered (e.g. props changed or not)
+   What it shows:
+  
+   - Which components rendered
+   - How long they took
+   - Why they re-rendered (e.g. props changed or not)
 
-    Use it to spot:
-     - Components re-rendering without props/state change
-     - Frequent re-renders in lists
+   Use it to spot:
+  
+   - Components re-rendering without props/state change
+   - Frequent re-renders in lists
 
-  2. Add `console.log()` Inside Components
+2. Add `console.log()` Inside Components
    
    ```tsx
    console.log("🔁 Re-rendering MyComponent");
@@ -214,66 +216,68 @@ When Route is Visited:
    - Simple but effective
    - Helps pinpoint if child components re-render unnecessarily
 
-  3. Use `React.memo`/`PureComponent` with Logs
+3. Use `React.memo`/`PureComponent` with Logs
 
-  ```tsx
-  const MyComponent = React.memo((props) => {
-  console.log("🔁 Memoized Component rendered");
-  return <div>{props.value}</div>;
-  });
-  ```
-
-  - If logs appear despite no prop change, there's a problem
-
-  4. Track Object/Array Identity
-
-  🛑 Common Mistake:
-   Passing a new object or array on every render:
-   
-   ```tsx
-   <MyComponent someProp={{ x: 1 }} /> // Always new object → re-renders
-   ```
-
-  ✅ Fix:
-   Use `useMemo` or `useCallback` to memoize:
-   ```tsx
-   const memoizedObj = useMemo(() => ({ x: 1 }), []);
-   ```
-
-  5. Add `why-did-you-render` Library
-   
-  Helps highlight unnecessary renders during development
-  🧪 Setup:
-  ```tsx
-  npm install @welldone-software/why-did-you-render
-  ```
-
-  ```tsx
-  import React from "react";
-  if (process.env.NODE_ENV === "development") {
-  // @ts-ignore
-  import("why-did-you-render").then((whyDidYouRender) => {
-    whyDidYouRender.default(React, {
-      trackAllPureComponents: true,
+    ```tsx
+    const MyComponent = React.memo((props) => {
+    console.log("🔁 Memoized Component rendered");
+    return <div>{props.value}</div>;
     });
-  });
-  }
-  ```
-  Now if a React.memo component re-renders without prop change, it logs a warning.
+    ```
 
-  6. Avoid Inline Functions in JSX (if passed to child)
+    - If logs appear despite no prop change, there's a problem
 
-  ```tsx
-  <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
-  ```
-  ✅ Instead:
+4. Track Object/Array Identity
 
-  ```tsx
-  const onClick = useCallback(() => doSomething(), []);
-  <MyComponent onClick={onClick} />
-  ```
+    Common Mistake:
+     Passing a new object or array on every render:
+     
+     ```tsx
+      <MyComponent someProp={{ x: 1 }} /> // Always new object → re-renders
+     ```
 
-  7. Break Down Big Components:
+    Fix:
+     Use `useMemo` or `useCallback` to memoize:
+   
+     ```tsx
+      const memoizedObj = useMemo(() => ({ x: 1 }), []);
+     ```
+
+5. Add `why-did-you-render` Library
+   
+    Helps highlight unnecessary renders during development
+      Setup:
+  
+     ```tsx
+        npm install @welldone-software/why-did-you-render
+     ```
+    
+     ```tsx
+        import React from "react";
+        if (process.env.NODE_ENV === "development") {
+        // @ts-ignore
+        import("why-did-you-render").then((whyDidYouRender) => {
+          whyDidYouRender.default(React, {
+            trackAllPureComponents: true,
+          });
+        });
+        }
+     ```
+     Now if a React.memo component re-renders without prop change, it logs a warning.
+
+6. Avoid Inline Functions in JSX (if passed to child)
+
+     ```tsx
+      <MyComponent onClick={() => doSomething()} /> // Triggers re-render every time
+     ```
+     Instead:
+
+     ```tsx
+      const onClick = useCallback(() => doSomething(), []);
+      <MyComponent onClick={onClick} />
+     ```
+
+7. Break Down Big Components:
 
   If a component has:
    - Many props
@@ -310,7 +314,7 @@ When Route is Visited:
   ```
 
 
-# Topics Covered: 
+## Topics Covered: 
 
 - Virtual Dom 
 - functional components vs class components
