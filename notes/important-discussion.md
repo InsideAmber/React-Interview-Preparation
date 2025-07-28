@@ -302,7 +302,7 @@ React handles this efficiently, but function closures, re-created props, or unop
 
 - Unexpected stale state problems
 
-React.memo, useCallback, and useMemo help solve this by caching.
+`React.memo`, `useCallback`, and `useMemo` help solve this by caching.
 
  Summary Table:
 
@@ -329,7 +329,7 @@ When to Prefer One Over the Other?
 
 Optimization Tip for Functional Components:
 
-- Use useCallback() for event handlers:
+- Use `useCallback()` for event handlers:
 
 ```jsx
 const handleClick = useCallback(() => {
@@ -337,7 +337,7 @@ const handleClick = useCallback(() => {
 }, []);
 ```
 
-- Use useMemo() for expensive computations:
+- Use `useMemo()` for expensive computations:
 
 ```jsx
 const expensiveValue = useMemo(() => {
@@ -345,7 +345,7 @@ const expensiveValue = useMemo(() => {
 }, [input]);
 ```
 
-- Use React.memo() to avoid child re-renders:
+- Use `React.memo()` to avoid child re-renders:
 
 ```jsx
 const Child = React.memo(({ prop }) => {
