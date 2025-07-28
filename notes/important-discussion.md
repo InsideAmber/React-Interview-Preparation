@@ -243,4 +243,112 @@ Even though they re-run everything, React is optimized internally to keep things
 
 **Memory Management**
 
-<!-- continue the discussion -->
+✅ **Class Components:**
+
+- Methods (like `handleClick`, `getEvenSum`) are created once and stored on the instance.
+
+- So even if the component re-renders, these functions are not re-created — efficient memory usage.
+
+```js
+class MyComponent extends React.Component {
+  handleClick = () => { /* created once */ };
+  render() {
+    return <button onClick={this.handleClick}>Click</button>;
+  }
+}
+```
+
+Memory use here is relatively static.
+
+⚠️ **Functional Components:**
+
+- Functions are re-declared on every render.
+
+- Each render creates new copies of `handleClick`, `calculateSomething`, etc.
+
+```js
+function MyComponent() {
+  const handleClick = () => { /* re-created every render */ };
+  return <button onClick={handleClick}>Click</button>;
+}
+```
+
+This can cause:
+
+- Unnecessary renders in children
+
+- Extra memory churn unless you use `useCallback` or `useMemo`
+
+Performance:
+
+| Case                      | Class Components  | Functional Components           |
+| ------------------------- | ----------------- | ------------------------------  |
+| Reusing functions/methods | Efficient reuse   | ⚠️ New on every render          |
+| Initial load              | Slightly heavier  | ✅ Lightweight startup          |
+| Lifecycle methods         | More verbose      | ✅ Cleaner with hooks           |
+| Side-effect handling      | Fragmented        | ✅ Consolidated via `useEffect` |
+| Async data & reactivity   | More boilerplate  | ✅ Elegant with hooks           |
+
+
+**Re-render Behavior:**
+
+- Class components: only `render()` is rerun
+
+- Functional components: entire function runs again
+
+React handles this efficiently, but function closures, re-created props, or unoptimized hook dependencies can still cause:
+
+- Performance issues
+
+- Unexpected stale state problems
+
+React.memo, useCallback, and useMemo help solve this by caching.
+
+ Summary Table:
+
+ | Feature                        | Class Components              | Functional Components            |
+| ------------------------------- | ----------------------------  | ------------------------------   |
+| Memory Efficiency               | ✅ Better in large components | ⚠️ More GC churn on re-renders  |
+| Reusability of methods          | ✅ Instance methods reused    | ⚠️ Functions recreated          |
+| Readability & conciseness       | ❌ More verbose               | ✅ Clean and modern             |
+| Custom Hook Support             | ❌ Not possible               | ✅ Fully supported              |
+| Side Effect Management          | ❌ Multiple lifecycle methods | ✅ `useEffect` unified          |
+| Newer Features (Suspense, etc.) | ❌ Less support               | ✅ First-class support          |
+
+
+When to Prefer One Over the Other?
+
+| Use Case                                                | Prefer           |
+| ------------------------------------------------------- | ---------------- |
+| Large enterprise codebase with legacy                   | Class            |
+| New React app or modern stack                           | Function (hooks) |
+| Fine-grained control over lifecycle                     | Class            |
+| React Native projects (most use hooks now)              | Function         |
+| Deep integration with third-party class-based libraries | Class            |
+
+
+Optimization Tip for Functional Components:
+
+- Use useCallback() for event handlers:
+
+```jsx
+const handleClick = useCallback(() => {
+  console.log("clicked");
+}, []);
+```
+
+- Use useMemo() for expensive computations:
+
+```jsx
+const expensiveValue = useMemo(() => {
+  return heavyCalculation(input);
+}, [input]);
+```
+
+- Use React.memo() to avoid child re-renders:
+
+```jsx
+const Child = React.memo(({ prop }) => {
+  return <div>{prop}</div>;
+});
+```
