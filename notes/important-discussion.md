@@ -1,4 +1,4 @@
-✅ **When Does useEffect(() => {}, []) Actually Run Again?**
+✅ **When Does `useEffect(() => {}, [])` Actually Run Again?**
 
 It will rerun only if:
 
@@ -27,14 +27,14 @@ A functional component re-renders when:
 
 - Its parent re-renders and it’s not memoized (like with `React.memo`)
 
-So, if you're clicking a button that updates count using useState, that will trigger a re-render of your component.
+So, if you're clicking a button that updates count using `useState`, that will trigger a re-render of your component.
 
 ✅ **What happens during a Re-render?**
 
 Every function inside the component body is re-executed during a re-render.
 That means:
 
-- JSX is recalculated.
+- `JSX` is recalculated.
 
 - All variables and functions declared inside the component are recreated.
 
@@ -78,7 +78,7 @@ When you click "Increment":
 
 - Component re-renders.
 
-- `getEvenSum()` is called again and "Calculating sum..." is logged again.
+- `getEvenSum()` is called again and `Calculating sum...` is logged again.
 
 🔧 How to Prevent Unnecessary Calculations
 
@@ -127,7 +127,7 @@ function MyComponent() {
 }
 ```
 
-So yes — functions, variables, and JSX inside the component are all recalculated when the component re-renders.
+So yes — `functions`, `variables`, and JSX inside the component are all recalculated when the component re-renders.
 
 🤔 Is this a drawback?
 It can be, but it's also a tradeoff React makes for simplicity and consistency:
@@ -148,7 +148,7 @@ It can be, but it's also a tradeoff React makes for simplicity and consistency:
 
 React assumes most functions are lightweight, but when they’re not, you can optimize them:
 
-1. ✅ useMemo
+1. ✅ `useMemo`
 
 Memoize expensive values:
 
@@ -156,7 +156,7 @@ Memoize expensive values:
 const evenSum = useMemo(() => getEvenSum(), []);
 ```
 
-2. ✅ useCallback
+2. ✅ `useCallback`
 
 Memoize functions to avoid re-creating them:
 
@@ -166,7 +166,7 @@ const getEvenSum = useCallback(() => {
 }, []);
 ```
 
-3. ✅ React.memo
+3. ✅ `React.memo`
 
 Memoize entire components if props/state don't change:
 
@@ -180,7 +180,7 @@ const Child = React.memo(({ data }) => {
 
 When a class component re-renders:
 
-- The render() method runs again.
+- The `render()` method runs again.
 
 - But other parts like methods, instance variables, and even the constructor do NOT run again.
 
