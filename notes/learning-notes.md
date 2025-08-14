@@ -318,6 +318,13 @@ The Core Difference
 
 It all comes down to where your React app’s HTML is generated:
 
+| Feature                   | **SSR (Server-Side Rendering)**                         | **CSR (Client-Side Rendering)**                           |
+| ------------------------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| **HTML generation**       | Happens **on the server** before sending to the browser | Happens **in the browser** after downloading JavaScript   |
+| **First content load**    | HTML is ready immediately → faster first paint          | Browser sees almost empty HTML → waits for JS to build UI |
+| **SEO**                   | Better for SEO — search engines see full HTML           | Worse for SEO if not handled, as bots may see blank HTML  |
+| **Initial load speed**    | Usually faster for content-heavy pages                  | Slower initially (due to JS download & render)            |
+| **Subsequent navigation** | May require full or partial server trips                | Instant after initial load (SPA behavior)                 |
 
 
 ## Topics Covered: 
