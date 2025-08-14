@@ -326,6 +326,93 @@ It all comes down to where your React app’s HTML is generated:
 | **Initial load speed**    | Usually faster for content-heavy pages                  | Slower initially (due to JS download & render)            |
 | **Subsequent navigation** | May require full or partial server trips                | Instant after initial load (SPA behavior)                 |
 
+How They Work
+
+**CSR Flow (Client-Side Rendering)**
+
+- Browser requests the page → gets a bare HTML file with a `<div id="root"></div>`.
+
+- React JS bundle downloads.
+
+- React runs in the browser and builds the UI inside `<div id="root">`.
+
+- User sees content after JS finishes execution.
+
+Example:
+
+A typical Create React App setup.
+
+**SSR Flow (Server-Side Rendering)**
+
+Browser requests the page → server runs React code and returns full HTML.
+
+User sees content immediately (before JS).
+
+JS bundle downloads → React hydrates the HTML to make it interactive.
+
+Subsequent navigation may behave like a SPA (if using frameworks like Next.js).
+
+Example:
+
+Next.js `getServerSideProps` or frameworks like Remix.
+
+**Pros & Cons**
+
+Client-Side Rendering
+
+✅ Pros:
+
+- Great for dynamic, interactive applications.
+
+- Reduced server load (server mostly just sends static files).
+
+- Fast navigation after first load (SPA experience).
+
+❌ Cons:
+
+- Slower first content paint (bad for low-bandwidth devices).
+
+- Poor SEO unless pre-rendering or SSR is added.
+
+- Users may see a "blank screen" until JS loads.
+
+Server-Side Rendering
+
+✅ Pros:
+
+- Faster first paint (HTML is ready on arrival).
+
+- Great for SEO (HTML has content for crawlers).
+
+-Better for slow devices (less JS to execute initially).
+
+❌ Cons:
+
+- More server load (server generates HTML for every request).
+
+- Complex to set up compared to CSR.
+
+- Navigation between pages might not be as fast without client-side routing.
+
+**When to Use Which?**
+
+| Use SSR When…                                           | Use CSR When…                                            |
+| ------------------------------------------------------- | -------------------------------------------------------- |
+| SEO is critical (blogs, e-commerce, news sites).        | SEO isn’t critical (internal dashboards, tools).         |
+| Users should see content instantly.                     | App is highly interactive and user-driven.               |
+| Content is static or semi-static but needs to be fresh. | You want a pure SPA experience with minimal server work. |
+
+Visual Diagram:
+
+```js
+--- SSR ---
+Browser → Server → [HTML + minimal JS] → Show content → Hydrate → Interactive
+
+--- CSR ---
+Browser → Server → [Empty HTML + JS] → Load JS → Render in browser → Interactive
+```
+
+
 
 ## Topics Covered: 
 
