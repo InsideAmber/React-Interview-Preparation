@@ -411,6 +411,8 @@ Browser → Server → [HTML + minimal JS] → Show content → Hydrate → Inte
 --- CSR ---
 Browser → Server → [Empty HTML + JS] → Load JS → Render in browser → Interactive
 ```
+## 10. What is the current version of react and what is the latest changes?
+
 
 
 
