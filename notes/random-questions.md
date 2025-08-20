@@ -928,3 +928,238 @@ In short
 - `npm build` = optimized production build.
 
 - `npm eject` = reveal configs for customization.
+
+## 10. What is Tree Shaking?
+
+Key Points about Tree Shaking:
+
+1. Static Analysis of ES Modules (ESM):
+
+- Works with `import` and `export` statements (ES6 modules), because they are static and analyzable at build time.
+
+- Doesn’t work as effectively with `require()` (CommonJS).
+
+2. Dead Code Elimination:
+
+- Removes code that is never used (not imported or referenced anywhere).
+
+- Example: If you import only `add` function from `mathUtils`, other functions like `subtract` or `multiply` will be eliminated.
+
+3. Bundle Size Optimization:
+
+- Reduces the bundle size, leading to faster load times and better performance.
+
+4. Supported By Modern Bundlers:
+
+- Webpack (with production mode), Rollup (default), Parcel, and Vite all support tree shaking.
+
+Example of Tree Shaking
+
+mathUtils.js
+
+```js
+export function add(a, b) {
+  return a + b;
+}
+
+export function subtract(a, b) {
+  return a - b;
+}
+
+export function multiply(a, b) {
+  return a * b;
+}
+```
+App.js
+
+```js
+import { add } from './mathUtils';
+
+console.log(add(2, 3));
+```
+Here, only the `add` function is imported and used.
+When bundled with tree shaking, `subtract` and `multiply` will be excluded from the final production 
+bundle.
+
+Cases Where Tree Shaking Might Fail
+
+- Using CommonJS (`require`) instead of ES Modules (`import/export`).
+
+- Dynamic imports like:
+
+```js
+const mathUtils = require('./mathUtils');
+mathUtils.add(2, 3); // Prevents tree shaking
+```
+- Side effects in code (e.g., if a module runs some code just by being imported).
+
+Best Practices for Effective Tree Shaking
+
+- Use ES6 module syntax (`import/export`).
+
+- Avoid writing side effects in modules (code that runs automatically on import).
+
+- Prefer named imports instead of importing everything:
+
+```js
+// ❌ Bad
+import * as utils from './mathUtils';
+utils.add(2, 3);
+
+// ✅ Good
+import { add } from './mathUtils';
+add(2, 3);
+```
+- Enable production mode in Webpack or set optimization.usedExports: true.
+
+## 11. Difference b/w dependency and devDependency
+
+```sql
+┌───────────────────────────┐
+│        Development        │
+│  (your local machine)     │
+├───────────────────────────┤
+│ devDependencies:          │
+│  - webpack / vite         │
+│  - babel / typescript     │
+│  - tailwindcss / postcss  │
+│  - eslint / prettier      │
+│                           │
+│ dependencies:             │
+│  - react / react-dom      │
+│  - axios / redux          │
+│  - lodash, etc.           │
+└─────────────┬─────────────┘
+              │  (npm run build)
+              ▼
+┌───────────────────────────┐
+│        Build Stage        │
+│ (CI/CD or local build cmd)│
+├───────────────────────────┤
+│ devDependencies are USED  │
+│ to:                       │
+│  - compile TS → JS        │
+│  - bundle code (webpack)  │
+│  - generate CSS (tailwind)│
+│  - tree-shake unused code │
+│                           │
+│ dependencies are BUNDLED  │
+│ into final JS + CSS files │
+└─────────────┬─────────────┘
+              │  (deploy)
+              ▼
+┌───────────────────────────┐
+│        Production         │
+│  (live server / client)   │
+├───────────────────────────┤
+│ Only final build is used: │
+│  - main.js (bundled app)  │
+│  - styles.css (from TW)   │
+│                           │
+│ devDependencies ❌ NOT NEEDED│
+│ dependencies ✅ REQUIRED   │
+└───────────────────────────┘
+```
+
+## 12. difference b/w package.json vs package-lock.json?
+
+| Feature       | **package.json**                       | **package-lock.json**                  |
+| ------------- | -------------------------------------- | -------------------------------------- |
+| Purpose       | Project manifest, defines dependencies | Lockfile, locks exact versions         |
+| Maintained by | Developer                              | npm (auto-generated)                   |
+| Versions      | Version ranges (`^`, `~`)              | Exact version numbers                  |
+| Editable?     | Yes                                    | No (auto-generated)                    |
+| Importance    | Defines what you want                  | Ensures you always get the same result |
+
+In short:
+
+- `package.json` = What dependencies you want.
+
+- `package-lock.json` = The exact versions you actually got.
+
+**Why commit package-lock.json to Git?**
+
+Reason 1 – Consistency across environments
+
+Imagine your package.json says:
+
+```json
+"react": "^18.2.0"
+```
+This allows any version between `18.2.0` and `<19.0.0`.
+
+- If you install today, you might get `18.2.0`.
+
+- If your teammate installs next week, they might get `18.3.1` (if released).
+
+- This could introduce unexpected bugs.
+
+👉 `package-lock.json` ensures everyone gets the exact same versions (`18.2.0` in this case).
+
+Reason 2 – Faster installations
+
+- `package-lock.json` includes resolved URLs + integrity hashes.
+
+- So npm/yarn doesn’t have to re-resolve versions every time → faster installs.
+
+Reason 3 – Security & reproducibility
+
+- Lockfile includes hashes (`integrity`) → prevents malicious package tampering.
+
+- Guarantees your CI/CD pipeline installs the exact same packages tested locally.
+
+If you delete `package-lock.json`:
+
+- `npm install` will re-resolve versions based on `package.json` ranges.
+
+- You may end up with slightly different package versions → bugs.
+
+- Best practice: Always commit `package-lock.json` (except in libraries where only `package.json` is needed).
+
+**Difference between `^` and `~` in versioning**
+
+In `package.json` dependencies:
+
+Caret (`^`)
+
+- Updates minor & patch versions, but not major.
+
+- Example:
+
+```json
+"react": "^18.2.0"
+```
+
+- Allowed: `18.2.1`, `18.3.0`, `18.9.5`
+
+- Not allowed: `19.0.0`
+
+Tilde (`~`)
+
+- Updates only patch versions (bug fixes).
+
+- Example:
+
+```json
+"axios": "~1.6.2"
+```
+
+- Allowed: `1.6.3`, `1.6.5`
+
+- Not allowed: `1.7.0`
+
+Summary:
+
+| Symbol | Updates Allowed | Example with `1.6.2`      |
+| ------ | --------------- | ------------------------- |
+| `^`    | Minor + Patch   | `1.7.0`, `1.8.5`, `1.9.x` |
+| `~`    | Patch only      | `1.6.3`, `1.6.9`          |
+| None   | Exact version   | Only `1.6.2`              |
+
+So in real-world projects:
+
+- `^` is most common (flexibility + bug fixes).
+
+- `~` is safer if you want stability but still want bug fixes.
+
+- Exact version (`1.6.2`) used when you want absolute stability.
