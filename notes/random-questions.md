@@ -1223,3 +1223,117 @@ Extra Note:
 - In real React rendering, React calls `HeaderComponent()` internally when it processes `<HeaderComponent />`.
 
 - But as a developer, you should almost never call `HeaderComponent()` directly → React needs to manage lifecycle, hooks, reconciliation, etc.
+
+## 14. What is the difference b/w client-side routing and server-side routing?
+
+🌍 Server-Side Routing (SSR Routing)
+
+📌 How it works:
+
+- Every time the user clicks a link, a new HTTP request is sent to the server.
+
+- The server looks at the URL, fetches the correct HTML page, and sends it back.
+
+- The entire page reloads each time.
+
+✅ Pros:
+
+- Better for SEO (search engines get full HTML).
+
+- Initial load might be faster because the server sends the whole page.
+
+- Works without JavaScript enabled.
+
+❌ Cons:
+
+- Slower navigation because each click reloads the page.
+
+- Higher server load (every request handled on server).
+
+- Not as “app-like”.
+
+Example (traditional server routing):
+
+```bash
+/home  → server returns home.html
+/about → server returns about.html
+```
+
+⚛ Client-Side Routing (CSR Routing)
+
+📌 How it works in React (e.g., React Router):
+
+- The app loads only one HTML file (index.html) initially.
+
+- When you click a link, React intercepts the navigation.
+
+- It doesn’t make a full page reload — instead, it updates the view by rendering the right component.
+
+- Browser history (pushState, popState) is updated so URL looks normal.
+
+✅ Pros:
+
+- Super fast navigation (no full reloads).
+
+- Feels like a native app.
+
+- Reduces server load (server mostly serves static assets once).
+
+❌ Cons:
+
+- Initial load can be heavier (JS bundle).
+
+- Needs extra setup for SEO (since HTML isn’t pre-rendered).
+
+- If JS fails, routing breaks.
+
+Example (React Router client-side):
+
+```bash
+/home  → shows <Home />
+/about → shows <About />
+```
+👉 Both are rendered inside <App /> without new requests to server (except API calls).
+
+Comparison Table
+
+| Feature         | Server-Side Routing        | Client-Side Routing               |
+| --------------- | -------------------------- | --------------------------------- |
+| Page Load       | Full reload on each route  | Single page, no reload            |
+| Speed           | Slower navigation          | Faster navigation                 |
+| SEO             | Better by default          | Needs SSR/Pre-rendering           |
+| Server Load     | High (renders per request) | Low (server mostly serves assets) |
+| User Experience | Feels like websites        | Feels like web apps               |
+
+
+Example in React Router (Client-Side)
+
+```tsx
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+function Home() {
+  return <h1>Home Page</h1>;
+}
+
+function About() {
+  return <h1>About Page</h1>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/home">Home</Link> | 
+        <Link to="/about">About</Link>
+      </nav>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+👉 Clicking links won’t reload the page — React handles everything client-side.
