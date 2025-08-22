@@ -1010,7 +1010,7 @@ utils.add(2, 3);
 import { add } from './mathUtils';
 add(2, 3);
 ```
-- Enable production mode in Webpack or set optimization.usedExports: true.
+- Enable production mode in Webpack or set `optimization.usedExports: true`.
 
 ## 11. Difference b/w dependency and devDependency
 
@@ -1081,7 +1081,7 @@ In short:
 
 Reason 1 – Consistency across environments
 
-Imagine your package.json says:
+Imagine your `package.json` says:
 
 ```json
 "react": "^18.2.0"
@@ -1100,7 +1100,7 @@ Reason 2 – Faster installations
 
 - `package-lock.json` includes resolved URLs + integrity hashes.
 
-- So npm/yarn doesn’t have to re-resolve versions every time → faster installs.
+- So `npm/yarn` doesn’t have to re-resolve versions every time → faster installs.
 
 Reason 3 – Security & reproducibility
 
@@ -1263,13 +1263,13 @@ Example (traditional server routing):
 
 📌 How it works in React (e.g., React Router):
 
-- The app loads only one HTML file (index.html) initially.
+- The app loads only one HTML file (`index.html`) initially.
 
 - When you click a link, React intercepts the navigation.
 
 - It doesn’t make a full page reload — instead, it updates the view by rendering the right component.
 
-- Browser history (pushState, popState) is updated so URL looks normal.
+- Browser history (`pushState`, `popState`) is updated so URL looks normal.
 
 ✅ Pros:
 
