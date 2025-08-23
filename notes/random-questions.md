@@ -1337,3 +1337,114 @@ function App() {
 export default App;
 ```
 👉 Clicking links won’t reload the page — React handles everything client-side.
+
+## 15. What are the best security practice for scalable applications in React?
+
+1. Protect Sensitive Data in Frontend
+
+- Never store API keys, secrets, tokens, or banking details in the frontend code or `localStorage`.
+
+- Use environment variables (`.env`) but remember: anything bundled is still public. Only keep non-sensitive config here.
+
+- For session tokens:
+
+  - Prefer HttpOnly Secure Cookies (set by backend).
+
+  - If you must store in `localStorage/sessionStorage`, encrypt and apply strict expiry checks.
+
+2. Prevent XSS (Cross-Site Scripting)
+
+React is generally safe because it escapes HTML by default:
+
+```tsx
+<p>{userInput}</p> // Safe
+<p dangerouslySetInnerHTML={{ __html: userInput }} /> // ❌ Unsafe
+```
+- Avoid `dangerouslySetInnerHTML`. If unavoidable, sanitize input using libraries like DOMPurify.
+
+- Validate all user inputs on frontend before sending them.
+
+3. Prevent Clickjacking & UI Redress Attacks
+
+Wrap your app with a frameguard check:
+
+```tsx
+if (window.top !== window.self) {
+  window.top.location = window.self.location;
+}
+```
+- Although backend usually adds `X-Frame-Options`, frontend can also detect & prevent rendering inside iframes.
+
+4. Strict Content Security Policy (CSP)
+
+- Configure CSP headers via backend (but React app should not rely on inline scripts).
+
+- Avoid inline `<script>` tags in React. Always use imports.
+
+5. Authentication & Authorization UI
+
+- Ensure role-based UI: Don’t show buttons or UI elements that user shouldn’t access.
+
+- Example: A normal user shouldn’t even see “Admin Dashboard” links.
+
+6. Secure Dependency Management
+
+- Always update React, React Router, and third-party libraries to latest versions.
+
+- Use tools like:
+
+  - npm audit
+
+  - snyk
+
+- Avoid untrusted libraries.
+
+7. Safe Handling of Forms
+
+- Add client-side validation (required fields, proper formats, regex for PAN/Aadhaar/IBAN, etc.).
+
+- Prevent duplicate submissions with disabled states during API calls.
+
+- Mask sensitive input fields (e.g., passwords, CVV, PIN).
+
+8. Secure API Calls
+
+- Always use HTTPS (TLS).
+
+- Add frontend rate limiting controls like disabling multiple OTP requests too quickly.
+
+- Use CSRF tokens for requests if needed (though mostly backend-managed).
+
+9. Avoid Exposing Internal Errors
+
+- Don’t show stack traces or raw API errors in UI.
+
+- Show user-friendly messages:
+
+```ts
+setError("Something went wrong. Please try again later.");
+```
+
+10. Frontend Monitoring & Logging
+
+- Add error boundaries in React to catch runtime errors.
+
+- Track suspicious activity like multiple failed login attempts (frontend logs can help detect anomalies early).
+
+**In summary for frontend (fintech context):**
+
+- No secrets in frontend.
+
+- Avoid dangerouslySetInnerHTML.
+
+- Secure forms, inputs, and API handling.
+
+- Hide unauthorized UI.
+
+- Keep dependencies updated.
+
+- Use HTTPS + safe error messages.
+
+- Add monitoring + strict CSP.
+
+# 16. What is CSRF? How to Prevent CSRF?

@@ -413,6 +413,8 @@ Browser → Server → [Empty HTML + JS] → Load JS → Render in browser → I
 ```
 ## 10. What is the current version of react and what is the latest changes?
 
+## 11. What is cookies and how to implement in reactjs?
+
 
 
 
