@@ -1448,3 +1448,95 @@ setError("Something went wrong. Please try again later.");
 - Add monitoring + strict CSP.
 
 # 16. What is CSRF? How to Prevent CSRF?
+
+What is CSRF?
+
+CSRF attack happens when:
+
+- A user is already authenticated (e.g., logged into their bank app).
+
+- The browser stores their session cookie (HttpOnly cookie).
+
+- An attacker tricks the user into visiting a malicious site that secretly sends a request to your app’s backend (e.g., transfer money).
+
+- Since cookies are automatically sent by browsers with every request to that domain, the backend thinks the request is valid, even though it came from attacker’s site.
+
+👉 Example:
+
+- You’re logged into your fintech app (finapp.com).
+
+- You open a malicious site.
+
+- That site runs:
+
+```html
+<img src="https://finapp.com/api/transfer?amount=10000&to=attacker" />
+```
+- Your browser auto-attaches the auth cookie → money transferred 😱.
+
+🛡️ How to Prevent CSRF (Frontend Side)
+
+Since backend must enforce strong protection, on the frontend you can support by:
+
+✅ 1. Use CSRF Tokens (Anti-CSRF Tokens)
+
+- Backend generates a random token (CSRF token) and sends it to the frontend (e.g., in a response or meta tag).
+
+- Frontend includes it in every state-changing request (POST, PUT, DELETE).
+
+- Attacker’s malicious site won’t know the token → request fails.
+
+Example (React fetch call with CSRF token):
+
+```tsx
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+fetch("/api/transfer", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-CSRF-Token": csrfToken || "",
+  },
+  body: JSON.stringify({ amount: 10000, to: "attacker" }),
+});
+```
+✅ 2. Use SameSite Cookies
+
+- Backend should set cookies with `SameSite=strict` or `lax`.
+
+- Then cookies won’t be sent automatically when request comes from another domain.
+
+- Frontend devs should ensure they don’t rely on unsafe cross-site requests.
+
+✅ 3. Use Double Submit Cookie
+
+- Backend sends a CSRF token both in a cookie & response body.
+
+- Frontend must send it back in a custom header with requests.
+
+- Attacker cannot read cookies → can’t guess the value.
+
+✅ 4. Avoid GET for State-Changing Requests
+
+- Only use `GET` for fetching data.
+
+- Use `POST`, `PUT`, `DELETE` for actions like transfer, update, etc.
+
+- This makes it harder for attackers to abuse `<img>` or `<a>` tags.
+
+✅ 5. Add UI-Based Safeguards
+
+- Confirmation dialogs for critical actions (like money transfer).
+
+- Re-authentication / OTP for sensitive actions.
+Example: Even if CSRF bypassed, attacker can’t succeed without OTP.
+
+**Summary for React Frontend**
+
+- Always include CSRF tokens in API calls (if backend provides them).
+
+- Never rely only on cookies for authentication (use headers like `Authorization: Bearer <token>` when possible).
+
+- Use `SameSite` cookies (frontend config with backend).
+
+- Add user confirmations for sensitive actions.

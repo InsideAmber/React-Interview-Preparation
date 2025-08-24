@@ -411,9 +411,247 @@ Browser → Server → [HTML + minimal JS] → Show content → Hydrate → Inte
 --- CSR ---
 Browser → Server → [Empty HTML + JS] → Load JS → Render in browser → Interactive
 ```
-## 10. What is the current version of react and what is the latest changes?
 
-## 11. What is cookies and how to implement in reactjs?
+## 10. What is cookies and how to implement in reactjs?
+
+1. Cookies
+
+- A cookie is a small piece of data stored in the browser, sent by the server.
+
+- Typically used to store:
+
+  - Session ID (reference to a logged-in user session on the server)
+
+  - Small preferences (language, theme, etc.)
+
+- Cookies can be:
+
+  - HTTP-only: not accessible from JS (more secure, used for authentication).
+
+  - Secure: sent only over HTTPS.
+
+  - SameSite: restricts cross-site requests to prevent CSRF.
+
+👉 Example: After login, backend sets:
+
+```bash
+
+Set-Cookie: sessionId=abcd1234; HttpOnly; Secure; SameSite=Strict
+
+```
+2. Session
+
+- A session is a server-side storage mechanism that stores user-specific data.
+
+- Session data is linked to a cookie (usually a `sessionId`).
+
+- Instead of storing sensitive data in the browser, only the session ID is stored in a cookie, and the server holds all actual data (like user ID, roles, cart, etc.).
+
+👉 Flow:
+
+- User logs in → server validates → creates a session in DB/Memory/Redis.
+
+- Server sets cookie (`sessionId=xyz`) in browser.
+
+- On every request, browser automatically sends the cookie.
+
+- Server reads the session ID → fetches data → identifies the user.
+
+3. Implementing in React
+
+Case 1: Using Cookie-based Auth (HTTP-only secure cookie)
+
+Here React doesn’t touch the cookie directly, the browser sends it automatically.
+
+Login Request (React code):
+
+```tsx
+// pages/Login.tsx
+import React, { useState } from "react";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    const res = await fetch("https://api.mybank.com/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // <-- Important: include cookies
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (res.ok) {
+      alert("Login successful!");
+    } else {
+      alert("Invalid credentials");
+    }
+  };
+
+  return (
+    <div>
+      <input value={email} onChange={e => setEmail(e.target.value)} />
+      <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
+};
+
+export default Login;
+```
+Here:
+
+- `credentials: "include"` → tells React fetch to include cookies.
+
+- Backend sets `Set-Cookie` header with `HttpOnly; Secure; SameSite=Strict`.
+
+- Browser stores it and automatically attaches it on every request.
+
+Fetching user data after login:
+
+```tsx
+const getProfile = async () => {
+  const res = await fetch("https://api.mybank.com/profile", {
+    method: "GET",
+    credentials: "include",
+  });
+  const data = await res.json();
+  console.log(data);
+};
+```
+Case 2: Using Session-like Token (JWT in Cookie or LocalStorage)
+
+Some apps store a JWT (JSON Web Token) instead of server sessions.
+
+- Backend returns `accessToken` after login.
+
+- React stores it either in:
+
+  - HttpOnly cookie (recommended) → browser auto-sends it.
+
+  - `localStorage` or `sessionStorage` (less secure, but easier).
+
+Example (JWT in localStorage):
+
+```tsx
+localStorage.setItem("token", token);
+
+// later in requests
+fetch("/api/data", {
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`
+  }
+});
+```
+4. Which is better?
+
+- For fintech, banking, or secure apps → Use HttpOnly secure cookies + server sessions.
+(Frontend can’t read the cookie, attacker scripts can’t steal it → prevents XSS token theft).
+
+- For general apps → JWT in localStorage is common, but needs extra protection against XSS.
+
+Summary:
+
+- Cookies = client-side storage (small, auto-sent by browser).
+
+- Sessions = server-side storage of user data, identified via cookies.
+
+- React implementation = Usually just `fetch` with `credentials: "include"`, backend manages sessions with cookies.
+
+⚡ So how does backend know it’s you?
+
+Because the cookie value (session ID / JWT) is like a "ticket".
+
+- When you first logged in with credentials (email+password), backend issued the ticket (cookie).
+
+- After that, you don’t need to send email/password each time. The browser just replays the ticket.
+
+- Backend validates the ticket against its session store or JWT signature.
+
+👉 Think of it like this analogy:
+
+- At the gate (login), you show ID proof (username/password).
+
+- Security gives you a visitor badge (session cookie).
+
+- Every time you re-enter, you just flash the badge (cookie).
+
+- Security already knows who you are by looking up the badge number (session lookup).
+
+Example request/response flow
+
+Login request (with email/password):
+
+```js
+POST /login
+Content-Type: application/json
+
+{ "email": "amber@test.com", "password": "12345" }
+```
+Login response (server sets cookie):
+
+```js
+HTTP/1.1 200 OK
+Set-Cookie: sessionId=xyz987; HttpOnly; Secure; SameSite=Strict
+```
+Next request from React with `credentials: "include"`:
+
+```js
+GET /profile
+Cookie: sessionId=xyz987
+```
+Backend logic (pseudo-code):
+
+```js
+app.get("/profile", (req, res) => {
+  const sessionId = req.cookies.sessionId;
+  const session = db.sessions.find(s => s.id === sessionId);
+
+  if (!session) return res.status(401).json({ error: "Unauthorized" });
+
+  const user = db.users.find(u => u.id === session.userId);
+  res.json({ email: user.email, name: user.name });
+});
+```
+Answer in short:
+
+`credentials: "include"` ensures the browser sends cookies with the request. Those cookies contain a session ID (or token) that the backend previously issued at login. The backend uses that session ID to look up the actual user.
+
+```bash
+┌─────────────┐          1. Login Request
+│   Browser   │  -------------------------------->   ┌─────────────┐
+│ (React App) │  { email, password }                 │   Backend   │
+└──────┬──────┘                                      └──────┬──────┘
+       │                                                    │
+       │        2. Backend validates user & issues          │
+       │        a session cookie                            │
+       │ <-----------------------------------------------   │
+       │  Set-Cookie: sessionId=XYZ123; HttpOnly; Secure    │
+       │                                                    │
+       ▼                                                    ▼
+
+┌─────────────┐          3. Later Request
+│   Browser   │  -------------------------------->   ┌─────────────┐
+│ (React App) │   (with credentials: "include")      │   Backend   │
+│             │   Cookie: sessionId=XYZ123           │             │
+└──────┬──────┘                                      └──────┬──────┘
+       │                                                    │
+       │  4. Backend looks up sessionId in DB/Redis         │
+       │  If valid → fetch user info                        │
+       │                                                    │
+       │ <--------------------------------------------------│
+       │        5. Response: { name: "Amber", balance: 500 }   
+       │
+       ▼
+┌─────────────┐
+│   Browser   │
+│ (React App) │  Shows user dashboard
+└─────────────┘
+```
+
+ 
+## 11. What is the current version of react and what is the latest changes?
+
 
 
 
